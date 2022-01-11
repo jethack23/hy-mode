@@ -55,7 +55,7 @@
 ;; TODO Would prefer to use the .set-namespace instead of remaking jedhy instance
 
 (defconst hy-jedhy--setup-code
-  "(import hy [hy.core.language [*]] [hy.core.macros [*]]) (require [hy.extra.anaphoric [*]]) (try (do (import jedhy jedhy.api) (setv --JEDHY (jedhy.api.API)) \"Started jedhy\") (except [e Exception] \"Failed to start jedhy\"))"
+  "(import hy hyrule.hy_init * hy.core.macros *) (require hyrule.hy_init *) (try (do (import jedhy jedhy.api) (setv --JEDHY (jedhy.api.API)) \"Started jedhy\") (except [e Exception] \"Failed to start jedhy\"))"
   "Text to send to internal Hy process to setup `jedhy'.")
 
 (defconst hy-jedhy--startup-success-text "'Started jedhy'"
