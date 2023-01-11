@@ -149,10 +149,10 @@ Not bound atm as this is temporary, run via M-x or bind yourself."
 
 (defun hy-jedhy--format-output-tuple (output)
   "Format OUTPUT given as a tuple."
-  (unless (s-equals? "(,)" output)
+  (unless (s-equals? "#()" output)
     (->> output
        (s-replace-all '(("'" . "")
-                        ("(, \"" . "")  ; one element list case
+                        ("#(\"" . "")  ; one element list case
                         ("\")" . "")))
        (s-split "\" \"")
        )))  ; comma is a valid token so can't replace it
@@ -251,7 +251,7 @@ Not bound atm as this is temporary, run via M-x or bind yourself."
 Retrieves full documentation, with firstline formatted same as eldoc, in a
 popup buffer.
 
-Does not (yet) complete the dot-dsl like Eldoc does currently.
+.Does not (yet) complete the dot-dsl like Eldoc does currently.
 
 Spacemacs users maybe be familiar with this functionality via
 shift-K keybinding that executes `spacemacs/evil-smart-doc-lookup'."
