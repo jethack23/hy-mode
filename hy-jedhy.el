@@ -55,14 +55,14 @@
 ;; TODO Would prefer to use the .set-namespace instead of remaking jedhy instance
 
 (defconst hy-jedhy--setup-code
-  "(import hy [hy.core.language [*]] [hy.core.macros [*]]) (require [hy.extra.anaphoric [*]]) (try (do (import jedhy jedhy.api) (setv --JEDHY (jedhy.api.API)) \"Started jedhy\") (except [e Exception] \"Failed to start jedhy\"))"
+  "(import hy hyrule.hy_init * hy.core.macros *) (require hyrule.hy_init *) (try (do (import jedhy jedhy.api) (setv --JEDHY (jedhy.api.API)) \"Started jedhy\") (except [e Exception] \"Failed to start jedhy\"))"
   "Text to send to internal Hy process to setup `jedhy'.")
 
 (defconst hy-jedhy--startup-success-text "'Started jedhy'"
   "Text identifying successful startup of jedhy.")
 
 (defconst hy-jedhy--reset-namespace-code
-  "(setv --JEDHY (jedhy.api.API :locals- (locals) :globals- (globals) :macros- --macros--))"
+  "(setv --JEDHY (jedhy.api.API :locals- (locals) :globals- (globals) :macros- __macros__))"
   "Text to send to make Jedhy's namespace current.")
 
 ;;; Startup
@@ -149,13 +149,13 @@ Not bound atm as this is temporary, run via M-x or bind yourself."
 
 (defun hy-jedhy--format-output-tuple (output)
   "Format OUTPUT given as a tuple."
-  (unless (s-equals? "()" output)
+  (unless (s-equals? "#()" output)
     (->> output
        (s-replace-all '(("'" . "")
-                        (",)" . "")  ; one element list case
-                        ("(" . "")
-                        (")" . "")))
-       (s-split ", "))))  ; comma is a valid token so can't replace it
+                        ("#(\"" . "")  ; one element list case
+                        ("\")" . "")))
+       (s-split "\" \"")
+       )))  ; comma is a valid token so can't replace it
 
 (defun hy-jedhy--format-describe-output (output)
   "Converts escaped newlines to true newlines."
@@ -251,7 +251,7 @@ Not bound atm as this is temporary, run via M-x or bind yourself."
 Retrieves full documentation, with firstline formatted same as eldoc, in a
 popup buffer.
 
-Does not (yet) complete the dot-dsl like Eldoc does currently.
+.Does not (yet) complete the dot-dsl like Eldoc does currently.
 
 Spacemacs users maybe be familiar with this functionality via
 shift-K keybinding that executes `spacemacs/evil-smart-doc-lookup'."
